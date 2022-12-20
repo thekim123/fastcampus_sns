@@ -19,9 +19,10 @@ public class PostBulkInsertTest {
 
     @Test
     public void bulkInsert() {
-        var easyRandom = PostFixtureFactory.get(3L,
-                LocalDate.of(2022, 1, 1),
-                LocalDate.of(2022, 2, 1));
+        var easyRandom = PostFixtureFactory.get(
+                3L,
+                LocalDate.of(1990, 1, 1),
+                LocalDate.of(2022, 12, 31));
 
         var stopWatch = new StopWatch();
         stopWatch.start();

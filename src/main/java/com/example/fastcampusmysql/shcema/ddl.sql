@@ -71,5 +71,17 @@ order by 2 desc;
 select count(distinct  (createdDate))
 from post;
 
+select *
+from post
+where memberId = 1
+order by createdDate desc
+limit 2
+offset 4;
+
+
+select *
+from POSTwhere memberId=4 and id > 1000;
+
+
 
 
