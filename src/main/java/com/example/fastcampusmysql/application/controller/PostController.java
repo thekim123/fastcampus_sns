@@ -1,6 +1,8 @@
 package com.example.fastcampusmysql.application.controller;
 
 
+import com.example.fastcampusmysql.application.usecase.CreatePostUsecase;
+import com.example.fastcampusmysql.application.usecase.GetTimelinePostsUsecase;
 import com.example.fastcampusmysql.domain.post.dto.DailyPostCount;
 import com.example.fastcampusmysql.domain.post.dto.DailyPostCountRequest;
 import com.example.fastcampusmysql.domain.post.dto.PostCommand;
@@ -11,7 +13,6 @@ import com.example.fastcampusmysql.util.CursorRequest;
 import com.example.fastcampusmysql.util.PageCursor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,10 +25,17 @@ import java.util.List;
 public class PostController {
     private final PostWriteService postWriteService;
     private final PostReadService postReadService;
+    private final GetTimelinePostsUsecase getTimelinePostsUsecase;
+    private final CreatePostUsecase createPostUsecase;
 
     @PostMapping("")
     public Long create(PostCommand command) {
         return postWriteService.create(command);
+    }
+
+    @PostMapping("/fanout")
+    public Long createByFanout(PostCommand command) {
+        return createPostUsecase.execute(command);
     }
 
     @GetMapping("/daily-post-counts")
@@ -50,5 +58,20 @@ public class PostController {
         return postReadService.getPosts(memberId, cursorRequest);
     }
 
+    @GetMapping("/member/{memberId}/timeline")
+    public PageCursor<Post> getTimeline(
+            @PathVariable Long memberId,
+            CursorRequest cursorRequest
+    ){
+        return getTimelinePostsUsecase.execute(memberId, cursorRequest);
+    }
+
+    @GetMapping("/member/{memberId}/timelineFanout")
+    public PageCursor<Post> getTimelineFanout(
+            @PathVariable Long memberId,
+            CursorRequest cursorRequest
+    ){
+        return getTimelinePostsUsecase.executeByTimeline(memberId, cursorRequest);
+    }
 
 }

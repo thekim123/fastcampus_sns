@@ -1,4 +1,4 @@
-package com.example.fastcampusmysql.application.usacase;
+package com.example.fastcampusmysql.application.usecase;
 
 import com.example.fastcampusmysql.domain.follow.entity.Follow;
 import com.example.fastcampusmysql.domain.follow.service.FollowReadService;
@@ -11,7 +11,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class GetFollowingMemberUsacase {
+public class GetFollowingMemberUsecase {
     private final MemberReadService memberReadService;
     private final FollowReadService followReadService;
 
