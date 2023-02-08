@@ -1,3 +1,6 @@
+create database fast_sns;
+use fast_sns;
+
 create table Member
 (
     id int auto_increment,
@@ -80,7 +83,7 @@ offset 4;
 
 
 select *
-from POSTwhere memberId=4 and id > 1000;
+from POST where memberId=4 and id > 1000;
 
 select *
 from post
@@ -100,6 +103,8 @@ create table timeline
 select * from timeline;
 
 select * from follow;
+
+select * from member;
 
 
 
