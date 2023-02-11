@@ -106,5 +106,6 @@ select * from follow;
 
 select * from member;
 
+alter table POST add column likeCount long;
 
-
+select * from POST;

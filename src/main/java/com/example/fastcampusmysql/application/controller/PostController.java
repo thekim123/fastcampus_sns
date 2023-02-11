@@ -62,7 +62,7 @@ public class PostController {
     public PageCursor<Post> getTimeline(
             @PathVariable Long memberId,
             CursorRequest cursorRequest
-    ){
+    ) {
         return getTimelinePostsUsecase.execute(memberId, cursorRequest);
     }
 
@@ -70,8 +70,13 @@ public class PostController {
     public PageCursor<Post> getTimelineFanout(
             @PathVariable Long memberId,
             CursorRequest cursorRequest
-    ){
+    ) {
         return getTimelinePostsUsecase.executeByTimeline(memberId, cursorRequest);
+    }
+
+    @PostMapping("{postId}/like")
+    public void likePost(@PathVariable Long postId) {
+        postWriteService.likePost(postId);
     }
 
 }
