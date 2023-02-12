@@ -1,7 +1,6 @@
 package com.example.fastcampusmysql.domain.post.repository;
 
 
-import com.example.fastcampusmysql.domain.member.entity.Member;
 import com.example.fastcampusmysql.util.PageHelper;
 import com.example.fastcampusmysql.domain.post.dto.DailyPostCount;
 import com.example.fastcampusmysql.domain.post.dto.DailyPostCountRequest;
@@ -39,6 +38,7 @@ public class PostRepository {
                     .createdAt(resultSet.getObject("createdAt", LocalDateTime.class))
                     .createdDate(resultSet.getObject("createdDate", LocalDate.class))
                     .likeCount(resultSet.getLong("likeCount"))
+                    .version(resultSet.getLong("version"))
                     .build();
 
     private static final RowMapper<DailyPostCount> DAILY_POST_COUNT_MAPPER =
@@ -201,7 +201,7 @@ public class PostRepository {
 
     public Optional<Post> findById(Long postId, Boolean requiredLock) {
         var sql = String.format("SELECT * FROM %s WHERE id = :postId", TABLE);
-        if(requiredLock){
+        if (requiredLock) {
             sql += " FOR UPDATE";
         }
         var params = new MapSqlParameterSource().addValue("postId", postId);
@@ -233,13 +233,15 @@ public class PostRepository {
                     likeCount = :likeCount, 
                     createdDate = :createdDate,
                     memberId = :memberId,
-                    createdAt = :createdAt 
-                WHERE id = :id
+                    createdAt = :createdAt, 
+                    version = :version + 1
+                WHERE id = :id and version = :version
                 """, TABLE);
         SqlParameterSource params = new BeanPropertySqlParameterSource(post);
-        namedParameterJdbcTemplate.update(sql, params);
+        var updatedCount = namedParameterJdbcTemplate.update(sql, params);
+        if(updatedCount == 0){
+            throw new RuntimeException("갱신 실패");
+        }
         return post;
-
-
     }
 }

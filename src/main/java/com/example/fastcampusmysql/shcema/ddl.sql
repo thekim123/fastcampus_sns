@@ -107,5 +107,8 @@ select * from follow;
 select * from member;
 
 alter table POST add column likeCount long;
+alter table POST add column version int default 0;
+alter table POST add column version1 bigint default 0;
+alter table POST drop column version1;
 
 select * from POST;
