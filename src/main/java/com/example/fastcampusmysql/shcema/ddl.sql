@@ -112,3 +112,14 @@ alter table POST add column version1 bigint default 0;
 alter table POST drop column version1;
 
 select * from POST;
+
+create table PostLike(
+    id int auto_increment,
+    memberId int not null ,
+    postId int not null ,
+    createdAt datetime not null ,
+    constraint PostLike_id_uindex
+                     primary key (id)
+);
+
+select * from PostLike;
